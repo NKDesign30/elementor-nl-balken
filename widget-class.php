@@ -70,7 +70,9 @@ class NL_Balken extends Widget_Base
   protected function render()
   {
     // Get the current cart total
-    $cart_total = WC()->cart->get_cart_contents_total();
+    $cart_total = WC()->cart->get_cart_contents_total() + WC()->cart->get_cart_contents_tax();
+
+
 
     // Get the thresholds
     $thresholds = get_option('wc_progress_bar_discount_thresholds', []);
@@ -86,7 +88,9 @@ class NL_Balken extends Widget_Base
 
 
     // Berechne den Wert des Warenkorbs inklusive Mehrwertsteuer
-    $cart_total_incl_tax = WC()->cart->get_total('incl');
+    $cart_total_incl_tax = WC()->cart->subtotal;
+
+
 
     // Füge den Wert des Warenkorbs inklusive Mehrwertsteuer in das versteckte Element ein
     echo '<div id="cart-total" style="display:none;">' . esc_attr($cart_total_incl_tax) . '</div>';
