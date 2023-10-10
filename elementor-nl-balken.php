@@ -38,8 +38,10 @@ function nl_balken_styles()
     background-color: #F2F2F2;
     border-radius: 4px;
   }
+  
 
   .progress-bar-fill {
+    max-width: 100%;
     height: 100%;
     background-color: #90c091;
     transition: width 0.5s;

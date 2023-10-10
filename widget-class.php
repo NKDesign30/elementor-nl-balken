@@ -78,8 +78,12 @@ class NL_Balken extends Widget_Base
     // Get the third threshold value
     $max_threshold = $thresholds[2]['amount'];
 
+
     // Calculate the progress
     $progress = ($cart_total / $max_threshold) * 100;
+    $progress = min($progress, 100); // Begrenzt den Fortschritt auf maximal 100%
+
+
 
     // Berechne den Wert des Warenkorbs inklusive Mehrwertsteuer
     $cart_total_incl_tax = WC()->cart->get_total('incl');
@@ -114,8 +118,13 @@ class NL_Balken extends Widget_Base
 
     // Display the text
     echo '<div class="progress-bar-text">';
-    echo 'Füge noch <span class="highlight">' . wc_price($remaining_amount) . '</span> deinem Warenkorb hinzu, um ';
-    echo '<span class="highlight">' . $next_discount . '% Rabatt</span> auf deinen Warenkorb zu erhalten. ';
+    if ($next_discount == 0) {
+      echo 'Füge noch <span class="highlight">' . wc_price($remaining_amount) . '</span> deinem Warenkorb hinzu, um ';
+      echo '<span class="highlight">Kostenlosen Versand </span>zu erhalten. ';
+    } else {
+      echo 'Füge noch <span class="highlight">' . wc_price($remaining_amount) . '</span> deinem Warenkorb hinzu, um ';
+      echo '<span class="highlight">' . $next_discount . '% Rabatt</span> auf deinen Warenkorb zu erhalten. ';
+    }
     echo '<a href="https://neurolab-vital.de/lieferkonditionen/" class="learn-more">Mehr erfahren</a>';
     echo '</div>';
   }

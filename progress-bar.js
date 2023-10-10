@@ -52,12 +52,58 @@ document.addEventListener('DOMContentLoaded', function() {
       break;
     }
   }
+// Update the text under the progress bar
+var textElement = document.getElementById('progress-bar-text');
+if (nextDiscount == 0) {
+    textElement.textContent = 'Füge noch ' + remainingAmount.toFixed(2) + ' € deinem Warenkorb hinzu, um Kostenlosen Versand auf deinen Warenkorb zu erhalten. Mehr erfahren';
+} else {
+    textElement.textContent = 'Füge noch ' + remainingAmount.toFixed(2) + ' € deinem Warenkorb hinzu, um ' + nextDiscount + ' % Rabatt auf deinen Warenkorb zu erhalten. Mehr erfahren';
+}
+console.log('Next discount:', nextDiscount);
 
-  // Update the text under the progress bar
-  var textElement = document.getElementById('progress-bar-text');
-  textElement.textContent = 'Füge noch ' + remainingAmount.toFixed(2) + ' € deinem Warenkorb hinzu, um ' + nextDiscount + ' % Rabatt auf deinen Warenkorb zu erhalten. Mehr erfahren';
 
   // Update the link URL
   var learnMoreLink = document.getElementById('learn-more-link');
   learnMoreLink.href = 'https://neurolab-vital.de/lieferkonditionen/';
 });
+
+
+
+function updateProgressBar() {
+  // AJAX-Anfrage an get_cart_total.php, um den aktualisierten Warenkorbwert zu erhalten
+  fetch('/wp-content/plugins/elementor-nl-balken/get_cart_total.php')
+    .then(response => response.json())
+    .then(data => {
+      var cartTotal = parseFloat(data.cart_total);
+          
+          // Aktualisieren Sie den Fortschrittsbalken basierend auf dem neuen Warenkorbwert
+          var progressBar = document.querySelector('.progress-bar');
+          var thresholds = JSON.parse(progressBar.getAttribute('data-thresholds').replace(/&quot;/g, '\"'));
+          var progress;
+
+          if (cartTotal <= thresholds[0].amount) {
+              progress = (cartTotal / thresholds[0].amount) * 40; // 40% for the first circle
+          } else if (cartTotal <= thresholds[1].amount) {
+              progress = 40 + ((cartTotal - thresholds[0].amount) / (thresholds[1].amount - thresholds[0].amount)) * 30; // 30% for the second circle
+          } else {
+              progress = 70 + ((cartTotal - thresholds[1].amount) / (thresholds[2].amount - thresholds[1].amount)) * 30; // 30% for the third circle
+          }
+
+          // Setzen Sie die Breite des Fortschrittsbalken-Füllbereichs
+          document.querySelector('.progress-bar-fill').style.width = progress + '%';
+
+          // Ändern Sie die Farbe der Kreise, wenn der Zielbetrag erreicht ist
+          var circles = document.querySelectorAll('.progress-bar-circle');
+          circles.forEach(function(circle, index) {
+              if (cartTotal >= thresholds[index].amount) {
+                  circle.classList.add('goal-reached');
+              } else {
+                  circle.classList.remove('goal-reached');
+              }
+              
+          });
+      });
+      
+}
+// Rufen Sie die updateProgressBar Funktion alle 5 Sekunden auf
+setInterval(updateProgressBar, 1000);
