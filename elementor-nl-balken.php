@@ -34,28 +34,28 @@ function nl_balken_styles()
   .progress-bar {
     position: relative;
     width: 300px;
-    height: 10px;
+    height: 15px;
     background-color: #F2F2F2;
     border-radius: 4px;
   }
   
 
   .progress-bar-fill {
-    max-width: 100%;
+max-width: 100%;
     height: 100%;
     background-color: #90c091;
     transition: width 0.5s;
+    border-radius: 105px;
   }
 
-  .progress-bar-circle {
+.progress-bar-circle {
     position: absolute;
-    top: -9px;
-    width: 28px;
-    height: 28px;
+    top: -4px;
+    width: 22px;
+    height: 22px;
     border-radius: 50%;
     background-color: #F2F2F2;
     filter: drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.25));
-    flex-shrink: 0;
     right: 0%;
   }
 
@@ -65,7 +65,7 @@ function nl_balken_styles()
 
   /* Add the style for the speech bubble */
   .progress-bar-circle::before {
-    content: attr(data-discount);
+content: attr(data-discount); 
     font-weight: 900;
     font-size: 24px;
     position: absolute;
@@ -85,7 +85,8 @@ function nl_balken_styles()
 
   .progress-bar-circle:nth-of-type(2)::before {
     font-family: "Font Awesome 5 Free";
-    content: "\f48b";
+    content: "\f0d1";
+    white-space: pre;
     font-weight: 900;
     font-size: 24px;
     position: absolute;
